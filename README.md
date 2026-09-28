@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>HellHounds - Women Flag Football Team 2027</title>
@@ -296,13 +295,11 @@ const FIREBASE_CONFIG = {
   messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID",
   appId: "PASTE_YOUR_APP_ID"
 };
-
 function firebaseConfigReady(){
   return FIREBASE_CONFIG.apiKey && !FIREBASE_CONFIG.apiKey.startsWith("PASTE_") &&
          FIREBASE_CONFIG.projectId && !FIREBASE_CONFIG.projectId.startsWith("PASTE_") &&
          FIREBASE_CONFIG.databaseURL && !FIREBASE_CONFIG.databaseURL.includes("PASTE_YOUR");
 }
-
 (async()=>{
   if(!firebaseConfigReady()){
     setStat("Setup required - add Firebase config to enable live sharing","off");
@@ -321,22 +318,19 @@ function firebaseConfigReady(){
         set:p=>db.ref("practice/rows/"+id).set(p)
       })
     };
-
-    const ready=()=>{
+const ready=()=>{
       if(got.m&&got.r){
         if(!state.seeded&&!tb.rows.length&&canWrite)seed();
         else seeded=true;
         if(canWrite)setStat("Live - synced with all coaches","live");
       }
     };
-
-    mainRef.on("value",snap=>{
+mainRef.on("value",snap=>{
       const d=snap.exists()?snap.val():{};
       state=merge(JSON.parse(JSON.stringify(d)),patch);
       got.m=true; applyState(); ready();
     },()=>setStat("Disconnected - check Firebase connection","off"));
-
-    rowsRef.on("value",snap=>{
+rowsRef.on("value",snap=>{
       const docs=[]; rowN={};
       snap.forEach(child=>{
         const d={id:child.key,...(child.val()||{})};
@@ -344,8 +338,7 @@ function firebaseConfigReady(){
       });
       got.r=true; renderRows(docs); ready();
     },()=>setStat("Disconnected - check Firebase connection","off"));
-
-    // Replace the existing main document update calls with Firebase updates.
+// Replace the existing main document update calls with Firebase updates.
     main={
       update:p=>mainRef.update(p),
       set:p=>mainRef.set(p)
